@@ -106,9 +106,10 @@ class UserController{
             if(confirm("Você deseja mesmo excluir este usuário?")){ 
                 let user = new User()
                 user.loadFromJSON(JSON.parse(tr.dataset.user))
-                user.remove()
-                tr.remove()
-                this.updateCount()
+                user.remove().then(user=>{
+                    tr.remove()
+                    this.updateCount()
+                })
             }
         })
 
@@ -210,7 +211,7 @@ class UserController{
     }
 
     selectAll(){
-        HttpRequest.get("users").then(data=>{
+        User.getUsersStorage().then(data=>{
             data.users.forEach(dataUser=>{
                 let user = new User()
                 user.loadFromJSON(dataUser)

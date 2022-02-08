@@ -74,22 +74,7 @@ class User{
     }
 
     static getUsersStorage(){
-        let users = []
-
-        if(localStorage.getItem("users")){
-            users = JSON.parse(localStorage.getItem("users"))
-        }
-
-        return users
-    }
-
-    getNewId(){
-        let usersID = localStorage.getItem("usersID")
-        if(!usersID) usersID = 0
-        
-        usersID++
-        localStorage.setItem("usersID", usersID)
-        return usersID
+        return HttpRequest.get(`/users`)
     }
 
     save(){
@@ -123,13 +108,6 @@ class User{
     }
 
     remove(){
-        let users = User.getUsersStorage()
-        users.forEach((u, index)=>{
-            if(u._id == this._id){
-                users.splice(index, 1)
-            }
-        })
-
-        localStorage.setItem("users", JSON.stringify(users))
+        return HttpRequest.delete(`users/${this._id}`)
     }
 }
