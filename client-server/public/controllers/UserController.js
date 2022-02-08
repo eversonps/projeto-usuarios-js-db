@@ -25,9 +25,10 @@ class UserController{
 
             this.getPhoto(this._formEl).then(content =>{
                 user._photo = content
-                user.save()
-                this.addLine(user)
-                this._formEl.reset()
+                user.save().then(user=>{
+                    this.addLine(user)
+                    this._formEl.reset()
+                })
             }, e => {
                 console.log("e")
             })
@@ -68,13 +69,11 @@ class UserController{
 
                 let userObj = new User()
                 userObj.loadFromJSON(result)
-                userObj.save()
-
-                tr = this.getTr(userObj, tr)
-
-                this._formUpdateEl.reset()
-
-                this.updateCount()
+                userObj.save().then(user=>{
+                    tr = this.getTr(user, tr)
+                    this._formUpdateEl.reset()
+                    this.updateCount()
+                })
             }, e => {
                 console.log("e")
             })       
@@ -86,6 +85,7 @@ class UserController{
 
         tr.dataset.user = JSON.stringify(dataUser)
 
+        console.log(dataUser)
         tr.innerHTML = `  
             <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
             <td>${dataUser.name}</td>
